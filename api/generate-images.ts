@@ -22,8 +22,14 @@ interface BrainData {
 // --- Image Processing Logic ---
 
 // Register the font
-const fontPath = path.resolve(process.cwd(), 'fonts', 'Roboto-Bold.ttf');
-registerFont(fontPath, { family: 'Roboto' });
+try {
+  const fontPath = path.join(__dirname, '..', 'fonts', 'Roboto-Bold.ttf');
+  console.log('Resolved font path:', fontPath);
+  registerFont(fontPath, { family: 'Roboto' });
+  console.log('Font registered successfully.');
+} catch (error) {
+  console.error('Failed to register font:', error);
+}
 
 
 const drawTextWithShadow = (
