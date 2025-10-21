@@ -1,7 +1,0 @@
-{
-  "functions": {
-    "api/generate-images.ts": {
-      "includeFiles": "fonts/**"
-    }
-  }
-}

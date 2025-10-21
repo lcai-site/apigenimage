@@ -21,15 +21,28 @@ interface BrainData {
 
 // --- Image Processing Logic ---
 
-// Register the font
-try {
-  const fontPath = path.join(__dirname, '..', 'fonts', 'Roboto-Bold.ttf');
-  console.log('Resolved font path:', fontPath);
-  registerFont(fontPath, { family: 'Roboto' });
-  console.log('Font registered successfully.');
-} catch (error) {
-  console.error('Failed to register font:', error);
-}
+// --- Font Loading ---
+const FONT_URL = 'https://app.unpkg.com/roboto-font@0.1.0/files/fonts/Roboto/roboto-bold-webfont.ttf';
+let fontRegistered = false;
+
+const loadAndRegisterFont = async () => {
+  if (fontRegistered) return;
+
+  try {
+    const response = await fetch(FONT_URL);
+    if (!response.ok) {
+      throw new Error(`Failed to fetch font: ${response.statusText}`);
+    }
+    const fontBuffer = await response.arrayBuffer();
+    registerFont(Buffer.from(fontBuffer), { family: 'Roboto' });
+    fontRegistered = true;
+    console.log('Font registered successfully from URL.');
+  } catch (error) {
+    console.error('Failed to load and register font:', error);
+    // As a fallback, we'll proceed without the custom font,
+    // which may result in missing characters (squares).
+  }
+};
 
 
 const drawTextWithShadow = (
@@ -159,6 +172,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   try {
+    // Ensure the font is loaded before generating images
+    await loadAndRegisterFont();
+
     const { animalData, brainData } = req.body;
 
     // Basic validation
