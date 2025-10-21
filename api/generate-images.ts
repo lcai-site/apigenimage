@@ -1,7 +1,8 @@
 // api/generate-images.ts
 
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { createCanvas, loadImage, CanvasRenderingContext2D, CanvasTextAlign } from 'canvas';
+import { createCanvas, loadImage, registerFont, CanvasRenderingContext2D, CanvasTextAlign } from 'canvas';
+import path from 'path';
 
 // --- Type Definitions ---
 interface AnimalData {
@@ -19,6 +20,11 @@ interface BrainData {
 }
 
 // --- Image Processing Logic ---
+
+// Register the font
+const fontPath = path.resolve(process.cwd(), 'fonts', 'Roboto-Bold.ttf');
+registerFont(fontPath, { family: 'Roboto' });
+
 
 const drawTextWithShadow = (
   ctx: CanvasRenderingContext2D,
@@ -67,7 +73,7 @@ const generateAnimalImage = async (baseImageUrl: string, data: AnimalData): Prom
             }
         }
 
-        const fontName = 'sans-serif'; // Use a generic font family available on servers
+        const fontName = 'Roboto'; // Use a generic font family available on servers
         const normalFontSize = 36;
         const highestFontSize = 40;
         const normalColor = '#FFFFFF';
@@ -106,7 +112,7 @@ const generateBrainImage = async (baseImageUrl: string, data: BrainData): Promis
   
         ctx.drawImage(img, 0, 0);
         
-        const fontName = 'sans-serif'; // Use a generic font family
+        const fontName = 'Roboto'; // Use a generic font family
         const fontSize = 44;
         const color = '#FFFFFF';
         const font = `bold ${fontSize}px ${fontName}`;
