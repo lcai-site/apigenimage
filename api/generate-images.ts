@@ -4,7 +4,7 @@ import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { createCanvas, loadImage, CanvasRenderingContext2D, CanvasTextAlign, Image } from 'canvas';
 
 // --- Constants ---
-const SPRITE_SHEET_URL = 'https://i.postimg.cc/YSFN8DvS/N-meros-transparentes.png';
+const SPRITE_SHEET_URL = 'https://i.postimg.cc/YSFN8DvS/N%C3%BAmeros-transparentes.png';
 
 const SPRITE_COORDINATES = {
   yellow: {
@@ -126,10 +126,10 @@ const generateAnimalImage = async (baseImageUrl: string, data: AnimalData, sprit
         }
 
         const positions: { [key: string]: { x: number; y: number } } = {
-          lobo:    { x: 120, y: 280 },
-          aguia:   { x: 420, y: 280 },
-          tubarao: { x: 120, y: 630 },
-          gato:    { x: 420, y: 630 },
+          lobo:    { x: 160, y: 280 },
+          aguia:   { x: 480, y: 280 },
+          tubarao: { x: 160, y: 630 },
+          gato:    { x: 480, y: 630 },
         };
 
         for (const [name, percentage] of animalEntries) {
@@ -138,7 +138,7 @@ const generateAnimalImage = async (baseImageUrl: string, data: AnimalData, sprit
           const text = `${percentage}%`;
           const { x, y } = positions[name as keyof AnimalData];
 
-          drawPercentage(ctx, spriteSheet, text, x, y, color, 'right');
+          drawPercentage(ctx, spriteSheet, text, x, y, color, 'center');
         }
 
         return canvas.toDataURL('image/png');
@@ -157,10 +157,10 @@ const generateBrainImage = async (baseImageUrl: string, data: BrainData, spriteS
         ctx.drawImage(img, 0, 0);
         
         const positions: { [key: string]: { x: number; y: number; align: CanvasTextAlign } } = {
-            pensante: { x: 320, y: 240, align: 'center' },
-            atuante:  { x: 320, y: 780, align: 'center' },
-            razao:    { x: 48, y: 450, align: 'left'   },
-            emocao:   { x: 600, y: 450, align: 'right'  },
+            pensante: { x: 320, y: 330, align: 'center' },
+            atuante:  { x: 320, y: 800, align: 'center' },
+            razao:    { x: 100, y: 510, align: 'center' },
+            emocao:   { x: 540, y: 510, align: 'center' },
         };
   
         const brainEntries = Object.entries(data) as [keyof BrainData, number][];
@@ -179,8 +179,8 @@ const generateBrainImage = async (baseImageUrl: string, data: BrainData, spriteS
     }
 };
 
-const BASE_IMAGE_BRAIN_URL = 'https://i.postimg.cc/LXMYjwtX/Inserir-um-t-tulo-6.png';
-const BASE_IMAGE_ANIMALS_URL = 'https://i.postimg.cc/0N1sjN2W/Inserir-um-t-tulo-7.png';
+const BASE_IMAGE_BRAIN_URL = 'https://i.postimg.cc/LXMYjwtX/Inserir-um-t%C3%ADtulo-6.png';
+const BASE_IMAGE_ANIMALS_URL = 'https://i.postimg.cc/0N1sjN2W/Inserir-um-t%C3%ADtulo-7.png';
 
 
 // --- Vercel Serverless Function Handler ---
