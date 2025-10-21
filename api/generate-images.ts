@@ -1,10 +1,10 @@
 // api/generate-images.ts
 
+import path from 'path';
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { createCanvas, loadImage, CanvasRenderingContext2D, CanvasTextAlign, Image } from 'canvas';
 
 // --- Constants ---
-const SPRITE_SHEET_URL = 'https://i.postimg.cc/YSFN8DvS/N%C3%BAmeros-transparentes.png';
 
 const SPRITE_COORDINATES = {
   yellow: {
@@ -199,17 +199,36 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       return res.status(400).json({ error: 'Request body must contain "animalData" and "brainData" objects.' });
     }
 
-    const spriteSheet = await loadImage(SPRITE_SHEET_URL);
-    
-    const [animalImage, brainImage] = await Promise.all([
-      generateAnimalImage(BASE_IMAGE_ANIMALS_URL, animalData, spriteSheet),
-      generateBrainImage(BASE_IMAGE_BRAIN_URL, brainData, spriteSheet),
-    ]);
+    console.log('--- Iniciando a geração de imagens ---');
 
-    res.status(200).json({
-      animalImage,
-      brainImage,
-    });
+    const spriteSheetPath = path.join(process.cwd(), 'assets', 'sprites.png');
+    console.log(`Caminho da sprite sheet: ${spriteSheetPath}`);
+
+    try {
+        const spriteSheet = await loadImage(spriteSheetPath);
+        console.log('Sprite sheet carregada com sucesso.');
+
+        console.log('Gerando imagem de animais...');
+        const animalImage = await generateAnimalImage(BASE_IMAGE_ANIMALS_URL, animalData, spriteSheet);
+        console.log('Imagem de animais gerada.');
+
+        console.log('Gerando imagem do cérebro...');
+        const brainImage = await generateBrainImage(BASE_IMAGE_BRAIN_URL, brainData, spriteSheet);
+        console.log('Imagem do cérebro gerada.');
+
+        console.log('--- Geração de imagens concluída com sucesso ---');
+        res.status(200).json({
+            animalImage,
+            brainImage,
+        });
+
+    } catch (loadImageError) {
+        console.error('Erro ao carregar a sprite sheet:', loadImageError);
+        return res.status(500).json({
+            error: 'Falha ao carregar recurso de imagem local.',
+            details: loadImageError instanceof Error ? loadImageError.message : String(loadImageError)
+        });
+    }
   } catch (error) {
     console.error('Image generation failed:', error);
     const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred.';
