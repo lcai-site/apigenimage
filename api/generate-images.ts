@@ -2,6 +2,14 @@ import { createCanvas, loadImage } from 'canvas';
 import path from 'path';
 import { VercelRequest, VercelResponse } from '@vercel/node';
 
+type PercentageConfig = {
+  key: string;
+  value: number;
+  x: number;
+  y: number;
+  align: 'left' | 'center' | 'right';
+};
+
 const SPRITE_SHEET_URL = path.join(__dirname, '..', 'assets', 'sprites.png');
 const SPRITE_COORDINATES = {
   '0': { white: { x: 0, y: 0, width: 50, height: 80 }, yellow: { x: 0, y: 80, width: 60, height: 96 } },
@@ -63,7 +71,7 @@ async function generateAnimalImage(data: any, spriteSheet: any) {
     const baseImage = await loadImage(path.join(__dirname, '..', 'assets', 'animals.png'));
     ctx.drawImage(baseImage, 0, 0, 800, 600);
 
-    const percentages = [
+    const percentages: PercentageConfig[] = [
       { key: 'aguia', value: data.aguia, x: 100, y: 100, align: 'center' },
       { key: 'gato', value: data.gato, x: 300, y: 100, align: 'center' },
       { key: 'tubarao', value: data.tubarao, x: 500, y: 100, align: 'center' },
@@ -90,7 +98,7 @@ async function generateBrainImage(data: any, spriteSheet: any) {
     const baseImage = await loadImage(path.join(__dirname, '..', 'assets', 'brain.png'));
     ctx.drawImage(baseImage, 0, 0, 800, 600);
 
-    const percentages = [
+    const percentages: PercentageConfig[] = [
       { key: 'emocao', value: data.emocao, x: 100, y: 100, align: 'center' },
       { key: 'razao', value: data.razao, x: 300, y: 100, align: 'center' },
       { key: 'pensante', value: data.pensante, x: 500, y: 100, align: 'center' },
